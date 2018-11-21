@@ -1,0 +1,1 @@
+comps.point ← comps.point + comps.normalv * EPSILON
