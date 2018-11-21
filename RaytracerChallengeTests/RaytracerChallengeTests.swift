@@ -1,34 +1,20 @@
-//
-//  RaytracerChallengeTests.swift
-//  RaytracerChallengeTests
-//
-//  Created by Michael Skiba on 11/10/2018.
-//  Copyright © 2018 Atelier Clockwork. All rights reserved.
-//
+import Foundation
+import Cucumberish
 
-import XCTest
 @testable import RaytracerChallenge
 
-class RaytracerChallengeTests: XCTestCase {
+@objc class CucumberishInitializer: NSObject {
+    @objc class func CucumberishSwiftInit()
+    {
+        //Create a bundle for the folder that contains your "Features" folder. In this example, the CucumberishInitializer.swift file is in the same directory as the "Features" folder.
+        let bundle = Bundle(for: CucumberishInitializer.self)
 
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
+        //All step definitions should be done before calling the following method
+        Cucumberish.executeFeatures(inDirectory: "features", from: bundle, includeTags: nil, excludeTags: nil)
 
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+        Given("Given hsize ← 160") { args, info in
+            print(String(describing: args))
+            print(String(describing: info))
         }
     }
-
 }

@@ -11,6 +11,9 @@
 		26E90888216FA43F00E92884 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 26E90887216FA43F00E92884 /* Assets.xcassets */; };
 		26E9088B216FA43F00E92884 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 26E90889216FA43F00E92884 /* MainMenu.xib */; };
 		26E90897216FA43F00E92884 /* RaytracerChallengeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26E90896216FA43F00E92884 /* RaytracerChallengeTests.swift */; };
+		26F68C5B21A606D600F82BC5 /* Cucumberish.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26F7D98F216FDD8300DA6AD4 /* Cucumberish.framework */; };
+		26F7D989216FB1D500DA6AD4 /* Features in Resources */ = {isa = PBXBuildFile; fileRef = 26F7D988216FB1D500DA6AD4 /* Features */; };
+		26F7D992216FDDAA00DA6AD4 /* Cucumberish.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 26F7D98F216FDD8300DA6AD4 /* Cucumberish.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,6 +26,19 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		26F7D98D216FD5BA00DA6AD4 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				26F7D992216FDDAA00DA6AD4 /* Cucumberish.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		26E90882216FA43E00E92884 /* RaytracerChallenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RaytracerChallenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		26E90885216FA43E00E92884 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -33,6 +49,10 @@
 		26E90892216FA43F00E92884 /* RaytracerChallengeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RaytracerChallengeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		26E90896216FA43F00E92884 /* RaytracerChallengeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RaytracerChallengeTests.swift; sourceTree = "<group>"; };
 		26E90898216FA43F00E92884 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		26F68C5A21A6065900F82BC5 /* bridging-header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "bridging-header.h"; sourceTree = "<group>"; };
+		26F68C5C21A6071400F82BC5 /* Cucumberish.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cucumberish.h; sourceTree = "<group>"; };
+		26F7D988216FB1D500DA6AD4 /* Features */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Features; sourceTree = "<group>"; };
+		26F7D98F216FDD8300DA6AD4 /* Cucumberish.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cucumberish.framework; path = Carthage/Build/Mac/Cucumberish.framework; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,15 +67,25 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26F68C5B21A606D600F82BC5 /* Cucumberish.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		26053C78216FA77D00ADC197 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				26F7D98F216FDD8300DA6AD4 /* Cucumberish.framework */,
+			);
+			path = Frameworks;
+			sourceTree = "<group>";
+		};
 		26E90879216FA43E00E92884 = {
 			isa = PBXGroup;
 			children = (
+				26053C78216FA77D00ADC197 /* Frameworks */,
 				26E90884216FA43E00E92884 /* RaytracerChallenge */,
 				26E90895216FA43F00E92884 /* RaytracerChallengeTests */,
 				26E90883216FA43E00E92884 /* Products */,
@@ -86,8 +116,11 @@
 		26E90895216FA43F00E92884 /* RaytracerChallengeTests */ = {
 			isa = PBXGroup;
 			children = (
+				26F7D988216FB1D500DA6AD4 /* Features */,
 				26E90896216FA43F00E92884 /* RaytracerChallengeTests.swift */,
 				26E90898216FA43F00E92884 /* Info.plist */,
+				26F68C5C21A6071400F82BC5 /* Cucumberish.h */,
+				26F68C5A21A6065900F82BC5 /* bridging-header.h */,
 			);
 			path = RaytracerChallengeTests;
 			sourceTree = "<group>";
@@ -119,6 +152,7 @@
 				26E9088E216FA43F00E92884 /* Sources */,
 				26E9088F216FA43F00E92884 /* Frameworks */,
 				26E90890216FA43F00E92884 /* Resources */,
+				26F7D98D216FD5BA00DA6AD4 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -145,6 +179,7 @@
 					};
 					26E90891216FA43F00E92884 = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1000;
 						TestTargetID = 26E90881216FA43E00E92884;
 					};
 				};
@@ -182,6 +217,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26F7D989216FB1D500DA6AD4 /* Features in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -346,9 +382,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = RaytracerChallenge/RaytracerChallenge.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 8NQ6VJNLCQ;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				INFOPLIST_FILE = RaytracerChallenge/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -356,6 +397,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.atelierclockwork.RaytracerChallenge;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
@@ -365,9 +407,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = RaytracerChallenge/RaytracerChallenge.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 8NQ6VJNLCQ;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				INFOPLIST_FILE = RaytracerChallenge/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -375,6 +422,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.atelierclockwork.RaytracerChallenge;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
@@ -384,9 +432,17 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 8NQ6VJNLCQ;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = "SRC_ROOT=@\\\"$(SRCROOT)\\\"";
 				INFOPLIST_FILE = RaytracerChallengeTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -395,6 +451,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.atelierclockwork.RaytracerChallengeTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "${SRCROOT}/${TARGET_NAME}/bridging-header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RaytracerChallenge.app/Contents/MacOS/RaytracerChallenge";
 			};
@@ -405,9 +464,17 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 8NQ6VJNLCQ;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = "SRC_ROOT=@\\\"$(SRCROOT)\\\"";
 				INFOPLIST_FILE = RaytracerChallengeTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -416,6 +483,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.atelierclockwork.RaytracerChallengeTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "${SRCROOT}/${TARGET_NAME}/bridging-header.h";
 				SWIFT_VERSION = 4.2;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RaytracerChallenge.app/Contents/MacOS/RaytracerChallenge";
 			};
