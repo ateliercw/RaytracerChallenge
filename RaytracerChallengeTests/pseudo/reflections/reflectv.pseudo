@@ -1,0 +1,1 @@
+comps.reflectv ← reflect(ray.direction, comps.normalv)
