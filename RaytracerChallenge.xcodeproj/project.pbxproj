@@ -6,6 +6,20 @@
 	objectVersion = 50;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		26CB6E1321A75C020079C7A7 /* Swiftlint */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 26CB6E1621A75C020079C7A7 /* Build configuration list for PBXAggregateTarget "Swiftlint" */;
+			buildPhases = (
+				26CB6E1B21A75C130079C7A7 /* Swiftlint */,
+			);
+			dependencies = (
+			);
+			name = Swiftlint;
+			productName = Swiftlint;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		26CB6E0E21A736C10079C7A7 /* Tuple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26CB6E0D21A736C10079C7A7 /* Tuple.swift */; };
 		26CB6E1021A738710079C7A7 /* TestTuples.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26CB6E0F21A738710079C7A7 /* TestTuples.swift */; };
@@ -17,6 +31,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		26CB6E1721A75C090079C7A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 26E9087A216FA43E00E92884 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 26CB6E1321A75C020079C7A7;
+			remoteInfo = Swiftlint;
+		};
+		26CB6E1921A75C0E0079C7A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 26E9087A216FA43E00E92884 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 26CB6E1321A75C020079C7A7;
+			remoteInfo = Swiftlint;
+		};
 		26E90893216FA43F00E92884 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 26E9087A216FA43E00E92884 /* Project object */;
@@ -127,6 +155,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				26CB6E1A21A75C0E0079C7A7 /* PBXTargetDependency */,
 			);
 			name = RaytracerChallenge;
 			productName = RaytracerChallenge;
@@ -145,6 +174,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				26CB6E1821A75C090079C7A7 /* PBXTargetDependency */,
 				26E90894216FA43F00E92884 /* PBXTargetDependency */,
 			);
 			name = RaytracerChallengeTests;
@@ -162,6 +192,9 @@
 				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "Atelier Clockwork";
 				TargetAttributes = {
+					26CB6E1321A75C020079C7A7 = {
+						CreatedOnToolsVersion = 10.1;
+					};
 					26E90881216FA43E00E92884 = {
 						CreatedOnToolsVersion = 10.0;
 					};
@@ -187,6 +220,7 @@
 			targets = (
 				26E90881216FA43E00E92884 /* RaytracerChallenge */,
 				26E90891216FA43F00E92884 /* RaytracerChallengeTests */,
+				26CB6E1321A75C020079C7A7 /* Swiftlint */,
 			);
 		};
 /* End PBXProject section */
@@ -211,6 +245,28 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		26CB6E1B21A75C130079C7A7 /* Swiftlint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/**/.swift",
+			);
+			name = Swiftlint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		26E9087E216FA43E00E92884 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -233,6 +289,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		26CB6E1821A75C090079C7A7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 26CB6E1321A75C020079C7A7 /* Swiftlint */;
+			targetProxy = 26CB6E1721A75C090079C7A7 /* PBXContainerItemProxy */;
+		};
+		26CB6E1A21A75C0E0079C7A7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 26CB6E1321A75C020079C7A7 /* Swiftlint */;
+			targetProxy = 26CB6E1921A75C0E0079C7A7 /* PBXContainerItemProxy */;
+		};
 		26E90894216FA43F00E92884 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 26E90881216FA43E00E92884 /* RaytracerChallenge */;
@@ -252,6 +318,24 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		26CB6E1421A75C020079C7A7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4WHVM4NE9G;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		26CB6E1521A75C020079C7A7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4WHVM4NE9G;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		26E90899216FA43F00E92884 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -376,10 +460,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 8NQ6VJNLCQ;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
 				INFOPLIST_FILE = RaytracerChallenge/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -401,10 +481,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 8NQ6VJNLCQ;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
 				INFOPLIST_FILE = RaytracerChallenge/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -471,6 +547,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		26CB6E1621A75C020079C7A7 /* Build configuration list for PBXAggregateTarget "Swiftlint" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				26CB6E1421A75C020079C7A7 /* Debug */,
+				26CB6E1521A75C020079C7A7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		26E9087D216FA43E00E92884 /* Build configuration list for PBXProject "RaytracerChallenge" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
