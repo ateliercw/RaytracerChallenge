@@ -33,7 +33,6 @@ class TestTuples: XCTestCase {
         XCTAssertFalse(p.isVector)
     }
 
-
     /// Tuple.vector() creates tuples with w=0
     func testVectorConstructor() {
         let v: Tuple = .vector(x: 4, y: -4, z: 3)
@@ -50,7 +49,7 @@ class TestTuples: XCTestCase {
     }
 
     /// Subtracting two points
-    func testSubtractingPoints(){
+    func testSubtractingPoints() {
         let p1 = Tuple.point(x: 3, y: 2, z: 1)
         let p2 = Tuple.point(x: 5, y: 6, z: 7)
         XCTAssertEqual(p1 - p2, .vector(x: -2, y: -4, z: -6))

@@ -1,0 +1,9 @@
+disabled-rules:
+  - nesting
+
+identifier_name:
+  excluded: # excluded via string array
+    - x
+    - y
+    - z
+    - w
