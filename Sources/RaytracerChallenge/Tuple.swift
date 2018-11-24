@@ -16,8 +16,8 @@ public struct Tuple: Equatable {
         return .init(x: x, y: y, z: z, w: 0)
     }
 
-    public var isPoint: Bool { return self.w.isEqualTo(1, epsilon: .epsilon) }
-    public var isVector: Bool { return self.w.isEqualTo(0, epsilon: .epsilon) }
+    public var isPoint: Bool { return w.isEqualTo(1, epsilon: .epsilon) }
+    public var isVector: Bool { return w.isEqualTo(0, epsilon: .epsilon) }
 
     public static func == (lhs: Tuple, rhs: Tuple) -> Bool {
         return lhs.x.isEqualTo(rhs.x, epsilon: .epsilon) &&
@@ -62,7 +62,7 @@ public struct Tuple: Equatable {
     }
 
     public func dot(_ rhs: Tuple) -> Float {
-        assert(self.isVector)
+        assert(isVector)
         assert(rhs.isVector)
         let dotX = x * rhs.x
         let dotY = y * rhs.y
@@ -72,7 +72,7 @@ public struct Tuple: Equatable {
     }
 
     public func cross(_ rhs: Tuple) -> Tuple {
-        assert(self.isVector)
+        assert(isVector)
         assert(rhs.isVector)
         return .vector(x: y * rhs.z - z * rhs.y,
                        y: z * rhs.x - x * rhs.z,
