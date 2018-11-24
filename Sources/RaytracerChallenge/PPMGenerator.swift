@@ -9,10 +9,10 @@ public class PPMGenerator {
 
     private var header: String {
         return """
-        P3
-        \(canvas.width) \(canvas.height)
-        255
-        """
+               P3
+               \(canvas.width) \(canvas.height)
+               255
+               """
     }
 
     private var body: String {
@@ -52,7 +52,7 @@ private extension Float {
 
 private extension String {
     func split(on separator: String, before index: Int) -> [String] {
-        guard self.count > index else { return [self] }
+        guard count > index else { return [self] }
         var elements: [String] = []
         var copy = self
         while copy.count > index {
