@@ -8,6 +8,13 @@ public struct Tuple: Equatable {
     public var z: Float
     public var w: Float
 
+    init(x: Float, y: Float, z: Float, w: Float) {
+        self.x = x
+        self.y = y
+        self.z = z
+        self.w = w
+    }
+
     public static func point(x: Float, y: Float, z: Float) -> Tuple {
         return .init(x: x, y: y, z: z, w: 1)
     }
