@@ -1,7 +1,7 @@
 import Foundation
 import RaytracerChallenge
 
-/// Excercise at the end of chapter 1
+/// Excercise at the end of chapter 2
 struct Projectile {
     let position: Tuple
     let velocity: Tuple

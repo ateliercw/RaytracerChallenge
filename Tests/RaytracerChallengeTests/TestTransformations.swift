@@ -1,123 +1,178 @@
+import Foundation
+import XCTest
+
+@testable import RaytracerChallenge
+
+class TestMatrixTransformations: XCTestCase {
+    /// Multiplying by a translation matrix
+    func testMutiplyingByTranslationMatrix() {
+        let transform = Matrix.translation(x: 5, y: -3, z: 2)
+        let p = Tuple.point(x: -3, y: 4, z: 5)
+        XCTAssertEqual(transform * p, .point(x: 2, y: 1, z: 7))
+        XCTAssertEqual(Matrix.identity.translated(x: 5, y: -3, z: 2) * p, .point(x: 2, y: 1, z: 7))
+    }
+
+    /// Multiplying by the inverse of a translation matrix
+    func testMultiplyingByInverseTranslationMatrix() {
+        guard let inv = Matrix.translation(x: 5, y: -3, z: 2).inverse else {
+            return XCTFail()
+        }
+        let p = Tuple.point(x: -3, y: 4, z: 5)
+        XCTAssertEqual(inv * p, .point(x: -8, y: 7, z: 3))
+    }
+
+    /// Translation does not affect vectors
+    func testTranslationDoesNotAffectVectors() {
+        let transform = Matrix.translation(x: 5, y: -3, z: 2)
+        let v = Tuple.vector(x: -3, y: 4, z: 5)
+        XCTAssertEqual(transform * v, v)
+    }
+
+    /// A scaling matrix applied to a point
+    func testScalingMatrixAppledToPoint() {
+        let transform = Matrix.scaling(x: 2, y: 3, z: 4)
+        let p = Tuple.point(x: -4, y: 6, z: 8)
+        XCTAssertEqual(transform * p, .point(x: -8, y: 18, z: 32))
+        XCTAssertEqual(Matrix.identity.scaled(x: 2, y: 3, z: 4) * p, .point(x: -8, y: 18, z: 32))
+    }
+
+    /// A scaling matrix applied to a vector
+    func testScalingMatrixAppledToVector() {
+        let transform = Matrix.scaling(x: 2, y: 3, z: 4)
+        let v = Tuple.vector(x: -4, y: 6, z: 8)
+        XCTAssertEqual(transform * v, .vector(x: -8, y: 18, z: 32))
+    }
+
+    /// Multiplying by the inverse of a scaling matrix
+    func testMultiplyingTheInverseOfScalingMatrix() {
+        guard let inv = Matrix.scaling(x: 2, y: 3, z: 4).inverse else {
+            return XCTFail()
+        }
+        let v = Tuple.vector(x: -4, y: 6, z: 8)
+        XCTAssertEqual(inv * v, .vector(x:-2, y:2, z: 2))
+    }
+
+    /// Reflection is scaling by a negative value
+    func testReflectionIsScalingByNegativeValue() {
+        let transform = Matrix.scaling(x: -1, y: 1, z: 1)
+        let p = Tuple.point(x: 2, y: 3, z: 4)
+        XCTAssertEqual(transform * p, .point(x: -2, y: 3, z: 4))
+    }
+
+    /// Rotating a point around the x axis
+    func testRotatingPointAroundXAxis() {
+        let p = Tuple.point(x: 0, y: 1, z: 0)
+        let halfQuarter = Matrix.rotation(x: .pi / 4)
+        let fullQuarter = Matrix.rotation(x: .pi / 2)
+        XCTAssertEqual(halfQuarter * p, .point(x: 0, y: sqrt(2)/2, z: sqrt(2)/2))
+        XCTAssertEqual(fullQuarter * p, .point(x: 0, y: 0, z: 1))
+        XCTAssertEqual(Matrix.identity.rotated(x: .pi / 2) * p, .point(x: 0, y: 0, z: 1))
+    }
+
+    /// The inverse of an x-rotation rotates in the opposite direction
+    func testInverseXRotationIsReversed() {
+        let p = Tuple.point(x: 0, y: 1, z: 0)
+        guard let inv = Matrix.rotation(x: .pi / 4).inverse else {
+            return XCTFail()
+        }
+        XCTAssertEqual(inv * p, .point(x: 0, y: sqrt(2)/2, z: -sqrt(2)/2))
+    }
+
+    /// Rotating a point around the y axis
+    func testRotatingAroundYAxis() {
+        let p = Tuple.point(x: 0, y: 0, z: 1)
+        let halfQuarter = Matrix.rotation(y: .pi / 4)
+        let fullQuarter = Matrix.rotation(y: .pi / 2)
+        XCTAssertEqual(halfQuarter * p, .point(x: sqrt(2)/2, y: 0, z: sqrt(2)/2))
+        XCTAssertEqual(fullQuarter * p, .point(x: 1, y: 0, z: 0))
+        XCTAssertEqual(Matrix.identity.rotated(y: .pi / 2) * p, .point(x: 1, y: 0, z: 0))
+    }
+
+    /// Rotating a point around the z axis
+    func testRotatingAroundZAxis() {
+        let p = Tuple.point(x: 0, y: 1, z: 0)
+        let halfQuarter = Matrix.rotation(z: .pi / 4)
+        let fullQuarter = Matrix.rotation(z: .pi / 2)
+        XCTAssertEqual(halfQuarter * p, .point(x: -sqrt(2)/2, y: sqrt(2)/2, z: 0))
+        XCTAssertEqual(fullQuarter * p, .point(x: -1, y: 0, z: 0))
+        XCTAssertEqual(Matrix.identity.rotated(z: .pi / 2) * p, .point(x: -1, y: 0, z: 0))
+    }
+
+    /// A shearing transformation moves x in proportion to y
+    func testShearingXtoY() {
+        let transform = Matrix.shearing(xY: 1)
+        let p = Tuple.point(x: 2, y: 3, z: 4)
+        XCTAssertEqual(transform * p, .point(x: 5, y: 3, z: 4))
+        XCTAssertEqual(Matrix.identity.sheared(xY: 1) * p, .point(x: 5, y: 3, z: 4))
+    }
+
+    /// A shearing transformation moves x in proportion to z
+    func testShearingXtoZ() {
+        let transform = Matrix.shearing(xZ: 1)
+        let p = Tuple.point(x: 2, y: 3, z: 4)
+        XCTAssertEqual(transform * p, .point(x: 6, y: 3, z: 4))
+        XCTAssertEqual(Matrix.identity.sheared(xZ: 1) * p, .point(x: 6, y: 3, z: 4))
+    }
+
+    /// A shearing transformation moves y in proportion to x
+    func testShearingYtoX() {
+        let transform = Matrix.shearing(yX: 1)
+        let p = Tuple.point(x: 2, y: 3, z: 4)
+        XCTAssertEqual(transform * p, .point(x: 2, y: 5, z: 4))
+        XCTAssertEqual(Matrix.identity.sheared(yX: 1) * p, .point(x: 2, y: 5, z: 4))
+    }
+
+    /// A shearing transformation moves y in proportion to z
+    func testShearingYtoZ() {
+        let transform = Matrix.shearing(yZ: 1)
+        let p = Tuple.point(x: 2, y: 3, z: 4)
+        XCTAssertEqual(transform * p, .point(x: 2, y: 7, z: 4))
+        XCTAssertEqual(Matrix.identity.sheared(yZ: 1) * p, .point(x: 2, y: 7, z: 4))
+    }
+
+    /// A shearing transformation moves z in proportion to x
+    func testShearingZtoX() {
+        let transform = Matrix.shearing(zX: 1)
+        let p = Tuple.point(x: 2, y: 3, z: 4)
+        XCTAssertEqual(transform * p, .point(x: 2, y: 3, z: 6))
+        XCTAssertEqual(Matrix.identity.sheared(zX: 1) * p, .point(x: 2, y: 3, z: 6))
+    }
+
+    /// A shearing transformation moves z in proportion to y
+    func testShearingZtoY() {
+        let transform = Matrix.shearing(zY: 1)
+        let p = Tuple.point(x: 2, y: 3, z: 4)
+        XCTAssertEqual(transform * p, .point(x: 2, y: 3, z: 7))
+        XCTAssertEqual(Matrix.identity.sheared(zY: 1) * p, .point(x: 2, y: 3, z: 7))
+    }
+
+    /// Individual transformations are applied in sequence
+    func testTransformationAppliedInSequence() {
+        let p = Tuple.point(x: 1, y: 0, z: 1)
+        let a = Matrix.rotation(x: .pi / 2)
+        let b = Matrix.scaling(x: 5, y: 5, z: 5)
+        let c = Matrix.translation(x: 10, y: 5, z: 7)
+        let p2 = a * p
+        XCTAssertEqual(p2, .point(x: 1, y: -1, z: 0))
+        let p3 = b * p2
+        XCTAssertEqual(p3, .point(x: 5, y: -5, z: 0))
+        let p4 = c * p3
+        XCTAssertEqual(p4, .point(x: 15, y: 0, z: 7))
+    }
+
+    /// Chained transformations must be applied in reverse order
+    func testChainedTransformationAppliedInReverseOrder() {
+        let p = Tuple.point(x: 1, y: 0, z: 1)
+        let a = Matrix.rotation(x: .pi / 2)
+        let b = Matrix.scaling(x: 5, y: 5, z: 5)
+        let c = Matrix.translation(x: 10, y: 5, z: 7)
+        XCTAssertEqual(c * b * a * p, .point(x: 15, y: 0, z: 7))
+        XCTAssertEqual(Matrix.rotation(x: .pi / 2)
+            .scaled(x: 5, y: 5, z: 5)
+            .translated(x: 10, y: 5, z: 7) * p, .point(x: 15, y: 0, z: 7))
+    }
+}
 /*
-Feature: Matrix Transformations
-
-Scenario: Multiplying by a translation matrix
-  Given transform ← translation(5, -3, 2)
-    And p ← point(-3, 4, 5)
-   Then transform * p = point(2, 1, 7)
-
-Scenario: Multiplying by the inverse of a translation matrix
-  Given transform ← translation(5, -3, 2)
-    And inv ← inverse(transform)
-    And p ← point(-3, 4, 5)
-   Then inv * p = point(-8, 7, 3)
-
-Scenario: Translation does not affect vectors
-  Given transform ← translation(5, -3, 2)
-    And v ← vector(-3, 4, 5)
-   Then transform * v = v
-
-Scenario: A scaling matrix applied to a point
-  Given transform ← scaling(2, 3, 4)
-    And p ← point(-4, 6, 8)
-   Then transform * p = point(-8, 18, 32)
-
-Scenario: A scaling matrix applied to a vector
-  Given transform ← scaling(2, 3, 4)
-    And v ← vector(-4, 6, 8)
-   Then transform * v = vector(-8, 18, 32)
-
-Scenario: Multiplying by the inverse of a scaling matrix
-  Given transform ← scaling(2, 3, 4)
-    And inv ← inverse(transform)
-    And v ← vector(-4, 6, 8)
-   Then inv * v = vector(-2, 2, 2)
-
-Scenario: Reflection is scaling by a negative value
-  Given transform ← scaling(-1, 1, 1)
-    And p ← point(2, 3, 4)
-   Then transform * p = point(-2, 3, 4)
-
-Scenario: Rotating a point around the x axis
-  Given p ← point(0, 1, 0)
-    And half_quarter ← rotation_x(π / 4)
-    And full_quarter ← rotation_x(π / 2)
-  Then half_quarter * p = point(0, √2/2, √2/2)
-    And full_quarter * p = point(0, 0, 1)
-
-Scenario: The inverse of an x-rotation rotates in the opposite direction
-  Given p ← point(0, 1, 0)
-    And half_quarter ← rotation_x(π / 4)
-    And inv ← inverse(half_quarter)
-  Then inv * p = point(0, √2/2, -√2/2)
-
-Scenario: Rotating a point around the y axis
-  Given p ← point(0, 0, 1)
-    And half_quarter ← rotation_y(π / 4)
-    And full_quarter ← rotation_y(π / 2)
-  Then half_quarter * p = point(√2/2, 0, √2/2)
-    And full_quarter * p = point(1, 0, 0)
-
-Scenario: Rotating a point around the z axis
-  Given p ← point(0, 1, 0)
-    And half_quarter ← rotation_z(π / 4)
-    And full_quarter ← rotation_z(π / 2)
-  Then half_quarter * p = point(-√2/2, √2/2, 0)
-    And full_quarter * p = point(-1, 0, 0)
-
-Scenario: A shearing transformation moves x in proportion to y
-  Given transform ← shearing(1, 0, 0, 0, 0, 0)
-    And p ← point(2, 3, 4)
-  Then transform * p = point(5, 3, 4)
-
-Scenario: A shearing transformation moves x in proportion to z
-  Given transform ← shearing(0, 1, 0, 0, 0, 0)
-    And p ← point(2, 3, 4)
-  Then transform * p = point(6, 3, 4)
-
-Scenario: A shearing transformation moves y in proportion to x
-  Given transform ← shearing(0, 0, 1, 0, 0, 0)
-    And p ← point(2, 3, 4)
-  Then transform * p = point(2, 5, 4)
-
-Scenario: A shearing transformation moves y in proportion to z
-  Given transform ← shearing(0, 0, 0, 1, 0, 0)
-    And p ← point(2, 3, 4)
-  Then transform * p = point(2, 7, 4)
-
-Scenario: A shearing transformation moves z in proportion to x
-  Given transform ← shearing(0, 0, 0, 0, 1, 0)
-    And p ← point(2, 3, 4)
-  Then transform * p = point(2, 3, 6)
-
-Scenario: A shearing transformation moves z in proportion to y
-  Given transform ← shearing(0, 0, 0, 0, 0, 1)
-    And p ← point(2, 3, 4)
-  Then transform * p = point(2, 3, 7)
-
-Scenario: Individual transformations are applied in sequence
-  Given p ← point(1, 0, 1)
-    And A ← rotation_x(π / 2)
-    And B ← scaling(5, 5, 5)
-    And C ← translation(10, 5, 7)
-  # apply rotation first
-  When p2 ← A * p
-  Then p2 = point(1, -1, 0)
-  # then apply scaling
-  When p3 ← B * p2
-  Then p3 = point(5, -5, 0)
-  # then apply translation
-  When p4 ← C * p3
-  Then p4 = point(15, 0, 7)
-
-Scenario: Chained transformations must be applied in reverse order
-  Given p ← point(1, 0, 1)
-    And A ← rotation_x(π / 2)
-    And B ← scaling(5, 5, 5)
-    And C ← translation(10, 5, 7)
-  When T ← C * B * A
-  Then T * p = point(15, 0, 7)
-
 Scenario: The transformation matrix for the default orientation
   Given from ← point(0, 0, 0)
     And to ← point(0, 0, -1)

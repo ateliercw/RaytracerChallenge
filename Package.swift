@@ -9,7 +9,9 @@ let package = Package(
         .executable(name: "Ticking",
                     targets: ["Ticking"]),
         .executable(name: "Projectile",
-                    targets: ["Projectile"])
+                    targets: ["Projectile"]),
+        .executable(name: "Clock",
+                    targets: ["Clock"])
     ],
     dependencies: [],
     targets: [
@@ -18,6 +20,8 @@ let package = Package(
         .target(name: "Ticking",
                 dependencies: ["RaytracerChallenge"]),
         .target(name: "Projectile",
+                dependencies: ["RaytracerChallenge"]),
+        .target(name: "Clock",
                 dependencies: ["RaytracerChallenge"]),
         .testTarget(name: "RaytracerChallengeTests",
                     dependencies: ["RaytracerChallenge"])
