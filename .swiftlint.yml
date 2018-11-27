@@ -1,4 +1,4 @@
-disabled-rules:
+disabled_rules:
   - nesting
 
 identifier_name:
