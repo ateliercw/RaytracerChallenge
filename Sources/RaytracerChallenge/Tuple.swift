@@ -1,7 +1,8 @@
 import Foundation
 
-public struct Tuple: Equatable {
+public struct Tuple: Equatable, Hashable {
     public static let zeroVector = Tuple.vector(x: 0, y: 0, z: 0)
+    public static let origin = Tuple.point(x: 0, y: 0, z: 0)
 
     public var x: Float
     public var y: Float

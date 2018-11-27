@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Matrix: Equatable {
+public struct Matrix: Equatable, Hashable {
     private var matrix: [[Float]]
 
     public init(rows: Int, columns: Int, repeating: Float = 0) {
