@@ -11,7 +11,7 @@ public struct Ray: Equatable {
         self.direction = direction
     }
 
-    func position(_ distance: Float) -> Tuple {
+    public func position(_ distance: Float) -> Tuple {
         return origin + (direction * distance)
     }
 

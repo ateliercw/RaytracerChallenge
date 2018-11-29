@@ -103,4 +103,8 @@ public struct Tuple: Equatable, Hashable {
                      z: z / magnitude,
                      w: w / magnitude)
     }
+
+    public func reflect(_ normal: Tuple) -> Tuple {
+        return self - normal * 2 * self.dot(normal)
+    }
 }

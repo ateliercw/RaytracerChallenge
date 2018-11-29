@@ -161,24 +161,24 @@ class TestTuples: XCTestCase {
         XCTAssertEqual(c * 2, Color(red: 0.4, green: 0.6, blue: 0.8))
     }
 
-    // Multiplying a color by a color
+    /// Multiplying a color by a color
     func testMultiplyingColorByColor() {
         let c1 = Color(red: 1, green: 0.2, blue: 0.4)
         let c2 = Color(red: 0.9, green: 1, blue: 0.1)
         XCTAssertEqual(c1 * c2, Color(red: 0.9, green: 0.2, blue: 0.04))
     }
+
+    /// Reflecting a vector approaching at 45°
+    func testReflectingVectorAt45() {
+        let v = Tuple.vector(x: 1, y: -1, z: 0)
+        let n = Tuple.vector(x: 0, y: 1, z: 0)
+        XCTAssertEqual(v.reflect(n), .vector(x: 1, y: 1, z: 0))
+    }
+
+    /// Reflecting a vector off a slanted surface
+    func testReflectingVectorAtSlant() {
+        let v = Tuple.vector(x: 0, y: -1, z: 0)
+        let n = Tuple.vector(x: sqrt(2)/2, y: sqrt(2)/2, z: 0)
+        XCTAssertEqual(v.reflect(n), .vector(x: 1, y: 0, z: 0))
+    }
 }
-
-/*
-Scenario: Reflecting a vector approaching at 45°
-  Given v ← vector(1, -1, 0)
-    And n ← vector(0, 1, 0)
-  When r ← reflect(v, n)
-  Then r = vector(1, 1, 0)
-
-Scenario: Reflecting a vector off a slanted surface
-  Given v ← vector(0, -1, 0)
-    And n ← vector(√2/2, √2/2, 0)
-  When r ← reflect(v, n)
-  Then r = vector(1, 0, 0)
- */
