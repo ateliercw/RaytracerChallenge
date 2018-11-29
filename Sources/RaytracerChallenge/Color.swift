@@ -1,6 +1,9 @@
 import Foundation
 
-public struct Color: Equatable {
+public struct Color: Equatable, Hashable {
+    public static let white = Color(red: 1, green: 1, blue: 1)
+    public static let black = Color(red: 0, green: 0, blue: 0)
+
     public var red: Float
     public var green: Float
     public var blue: Float

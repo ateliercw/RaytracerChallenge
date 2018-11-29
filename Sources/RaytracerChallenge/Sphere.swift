@@ -3,10 +3,12 @@ import Foundation
 public struct Sphere: Equatable, Hashable {
     public let id: UUID
     public var transform: Matrix
+    public var material: Material
 
-    public init(transform: Matrix = .identity) {
+    public init(transform: Matrix = .identity, material: Material = Material()) {
         id = UUID()
         self.transform = transform
+        self.material = material
     }
 
     public func intersections(_ ray: Ray) -> [Intersection] {
@@ -28,5 +30,16 @@ public struct Sphere: Equatable, Hashable {
         let t2 = (-b + sqrtDiscriminant) / (2 * a)
 
         return  [t1, t2].map { Intersection(distance: $0, object: .sphere(self)) }
+    }
+
+    public func normal(at point: Tuple) -> Tuple {
+        guard let inverse = transform.inverse else {
+            fatalError("Failed to invert transform")
+        }
+        let objectPoint = inverse * point
+        let objectNormal = objectPoint - .origin
+        var worldNormal = inverse.transposed * objectNormal
+        worldNormal.w = 0
+        return worldNormal.normalized
     }
 }
