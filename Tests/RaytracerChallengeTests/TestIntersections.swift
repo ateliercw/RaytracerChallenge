@@ -12,43 +12,47 @@ class TestIntersections: XCTestCase {
         XCTAssertEqual(i.object as? Sphere, s)
     }
 
+    /// Precomputing the state of an intersection
+    func testPrecomputingStateOfIntersection() {
+        let r = Ray(origin: .point(x: 0, y: 0, z: -5), direction: .vector(x: 0, y: 0, z: 1))
+        let shape = Sphere()
+        let i = Intersection(distance: 4, object: shape)
+        let comps = IntersectionState(intersection: i, ray: r)
+        XCTAssertEqual(comps.distace, i.distance)
+        XCTAssertEqual(comps.object.id, i.object.id)
+        XCTAssertEqual(comps.point, .point(x: 0, y: 0, z: -1))
+        XCTAssertEqual(comps.eyeV, .vector(x: 0, y: 0, z: -1))
+        XCTAssertEqual(comps.normalV, .vector(x: 0, y: 0, z: -1))
+    }
 /*
-Scenario: Precomputing the state of an intersection
-  Given r ← ray(point(0, 0, -5), vector(0, 0, 1))
-    And shape ← sphere()
-    And i ← intersection(4, shape)
-  When comps ← prepare_computations(i, r)
-  Then comps.t = i.t
-    And comps.object = i.object
-    And comps.point = point(0, 0, -1)
-    And comps.eyev = vector(0, 0, -1)
-    And comps.normalv = vector(0, 0, -1)
-
 Scenario: Precomputing the reflection vector
   Given shape ← plane()
     And r ← ray(point(0, 1, -1), vector(0, -√2/2, √2/2)) 
     And i ← intersection(√2, shape)                      
   When comps ← prepare_computations(i, r)
-  Then comps.reflectv = vector(0, √2/2, √2/2)
+   Then comps.reflectv = vector(0, √2/2, √2/2)
+*/
 
-Scenario: The hit, when an intersection occurs on the outside
-  Given r ← ray(point(0, 0, -5), vector(0, 0, 1))
-    And shape ← sphere()
-    And i ← intersection(4, shape)
-  When comps ← prepare_computations(i, r)
-  Then comps.inside = false
+    /// The hit, when an intersection occurs on the outside
+    func testHitWhenIntersectionOccursOutside() {
+        let r = Ray(origin: .point(x: 0, y: 0, z: -5), direction: .vector(x: 0, y: 0, z: 1))
+        let shape = Sphere()
+        let i = Intersection(distance: 4, object: shape)
+        XCTAssertFalse(IntersectionState(intersection: i, ray: r).isInside)
+    }
 
-Scenario: The hit, when an intersection occurs on the inside
-  Given r ← ray(point(0, 0, 0), vector(0, 0, 1))
-    And shape ← sphere()
-    And i ← intersection(1, shape)
-  When comps ← prepare_computations(i, r)
-  Then comps.point = point(0, 0, 1)
-    And comps.eyev = vector(0, 0, -1)
-    And comps.inside = true
-      # normal would have been (0, 0, 1), but is inverted!
-    And comps.normalv = vector(0, 0, -1)
-
+    /// The hit, when an intersection occurs on the inside
+    func testHitWhenIntersectionOccursInside() {
+        let r = Ray(origin: .point(x: 0, y: 0, z: 0), direction: .vector(x: 0, y: 0, z: 1))
+        let shape = Sphere()
+        let i = Intersection(distance: 1, object: shape)
+        let comps = IntersectionState(intersection: i, ray: r)
+        XCTAssertEqual(comps.point, .point(x: 0, y: 0, z: 1))
+        XCTAssertEqual(comps.eyeV, .vector(x: 0, y: 0, z: -1))
+        XCTAssertTrue(comps.isInside)
+        XCTAssertEqual(comps.normalV, .vector(x: 0, y: 0, z: -1))
+    }
+/*
 Scenario: The hit should offset the point
   Given r ← ray(point(0, 0, -5), vector(0, 0, 1))
     And shape ← sphere() with:
@@ -86,7 +90,7 @@ Scenario: The under point is offset below the surface
         XCTAssertEqual(xs.hit, i1)
     }
 
-    /// The hit, when sp,e intersections have negative t
+    /// The hit, when all intersections have negative t
     func testHitContainsSomeNegativeDistanceIntersections() {
         let s = Sphere()
         let i1 = Intersection(distance: -1, object: s)

@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Ray: Equatable {
+public struct Ray: Equatable, Hashable {
     public var origin: Tuple
     public var direction: Tuple
 
