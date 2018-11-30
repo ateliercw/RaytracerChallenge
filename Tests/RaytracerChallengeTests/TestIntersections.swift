@@ -7,9 +7,9 @@ class TestIntersections: XCTestCase {
     /// An intersection encapsulates t and object
     func testIntersectionEncapsulatesDistanceAndObject() {
         let s = Sphere()
-        let i = Intersection(distance: 3.5, object: .sphere(s))
+        let i = Intersection(distance: 3.5, object: s)
         XCTAssertEqual(i.distance, 3.5)
-        XCTAssertEqual(i.object.sphere, s)
+        XCTAssertEqual(i.object as? Sphere, s)
     }
 
 /*
@@ -69,8 +69,8 @@ Scenario: The under point is offset below the surface
     /// Aggregating intersections
     func testAggregatingIntersections() {
         let s = Sphere()
-        let i1 = Intersection(distance: 1, object: .sphere(s))
-        let i2 = Intersection(distance: 2, object: .sphere(s))
+        let i1 = Intersection(distance: 1, object: s)
+        let i2 = Intersection(distance: 2, object: s)
         let xs = [i1, i2]
         XCTAssertEqual(xs.count, 2)
         XCTAssertEqual(xs[0].distance, 1)
@@ -80,8 +80,8 @@ Scenario: The under point is offset below the surface
     /// The hit, when all intersections have positive t
     func testHitContainsAllPositiveDistanceIntersections() {
         let s = Sphere()
-        let i1 = Intersection(distance: 1, object: .sphere(s))
-        let i2 = Intersection(distance: 2, object: .sphere(s))
+        let i1 = Intersection(distance: 1, object: s)
+        let i2 = Intersection(distance: 2, object: s)
         let xs = [i1, i2]
         XCTAssertEqual(xs.hit, i1)
     }
@@ -89,8 +89,8 @@ Scenario: The under point is offset below the surface
     /// The hit, when sp,e intersections have negative t
     func testHitContainsSomeNegativeDistanceIntersections() {
         let s = Sphere()
-        let i1 = Intersection(distance: -1, object: .sphere(s))
-        let i2 = Intersection(distance: 1, object: .sphere(s))
+        let i1 = Intersection(distance: -1, object: s)
+        let i2 = Intersection(distance: 1, object: s)
         let xs = [i1, i2]
         XCTAssertEqual(xs.hit, i2)
     }
@@ -98,8 +98,8 @@ Scenario: The under point is offset below the surface
     /// The hit, when all intersections have negative t
     func testHitContainsAllNegativeDistanceInteractions() {
         let s = Sphere()
-        let i1 = Intersection(distance: -2, object: .sphere(s))
-        let i2 = Intersection(distance: -1, object: .sphere(s))
+        let i1 = Intersection(distance: -2, object: s)
+        let i2 = Intersection(distance: -1, object: s)
         let xs = [i1, i2]
         XCTAssertNil(xs.hit)
     }
@@ -108,10 +108,10 @@ Scenario: The under point is offset below the surface
     func testHitContainsLowestNonNegativeIntersection() {
         let s = Sphere()
 
-        let i1 = Intersection(distance: 5, object: .sphere(s))
-        let i2 = Intersection(distance: 7, object: .sphere(s))
-        let i3 = Intersection(distance: -3, object: .sphere(s))
-        let i4 = Intersection(distance: 2, object: .sphere(s))
+        let i1 = Intersection(distance: 5, object: s)
+        let i2 = Intersection(distance: 7, object: s)
+        let i3 = Intersection(distance: -3, object: s)
+        let i4 = Intersection(distance: 2, object: s)
         let xs = [i1, i2, i3, i4]
         XCTAssertEqual(xs.hit, i4)
     }

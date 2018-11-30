@@ -24,10 +24,9 @@ for y in 0..<canvasPixels {
                       direction: (position - rayOrigin).normalized)
         guard let hit = sphere.intersections(ray).hit else { continue }
         let point = ray.position(hit.distance)
-        guard let sphere = hit.object.sphere else { continue }
-        let normal = sphere.normal(at: point)
+        let normal = hit.object.normal(at: point)
         let eye = -ray.direction
-        canvas[x: x, y: y] = sphere.material.lighting(light: light, position: point, eyeVector: eye, normalVector: normal)
+        canvas[x: x, y: y] = hit.object.material.lighting(light: light, position: point, eyeVector: eye, normalVector: normal)
     }
 }
 

@@ -1,19 +1,10 @@
 import Foundation
 
 public struct Intersection: Equatable, Hashable, Comparable {
-    public enum Object: Equatable, Hashable {
-        case sphere(Sphere)
-
-        public var sphere: Sphere? {
-            if case .sphere(let sphere) = self { return sphere }
-            return nil
-        }
-    }
-
     public let distance: Float
-    public let object: Intersection.Object
+    public let object: GeometryObject
 
-    public init(distance: Float, object: Intersection.Object) {
+    public init(distance: Float, object: GeometryObject) {
         self.distance = distance
         self.object = object
     }
@@ -21,6 +12,15 @@ public struct Intersection: Equatable, Hashable, Comparable {
     public var isIntersection: Bool { return self.distance >= 0 }
     public static func < (lhs: Intersection, rhs: Intersection) -> Bool {
         return lhs.distance < rhs.distance
+    }
+
+    public static func == (lhs: Intersection, rhs: Intersection) -> Bool {
+        return lhs.object.id == rhs.object.id && lhs.distance.isEqualTo(rhs.distance, epsilon: .epsilon)
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(distance)
+        hasher.combine(object.id)
     }
 }
 

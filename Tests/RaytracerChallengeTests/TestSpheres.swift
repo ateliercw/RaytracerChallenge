@@ -59,9 +59,9 @@ class TestSpheres: XCTestCase {
         let s = Sphere()
         let xs = s.intersections(r)
         XCTAssertEqual(xs.count, 2)
-        XCTAssertEqual(xs[0].object.sphere, s)
-        XCTAssertEqual(xs[1].object.sphere, s)
-        XCTAssertNotEqual(xs[0].object.sphere, Sphere())
+        XCTAssertEqual(xs[0].object as? Sphere, s)
+        XCTAssertEqual(xs[1].object as? Sphere, s)
+        XCTAssertNotEqual(xs[0].object as? Sphere, Sphere())
     }
 
     /// A sphere's default transformation
