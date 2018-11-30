@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Sphere: Equatable, Hashable {
+public struct Sphere: Equatable, Hashable, GeometryObject {
     public let id: UUID
     public var transform: Matrix
     public var material: Material
@@ -29,7 +29,7 @@ public struct Sphere: Equatable, Hashable {
         let t1 = (-b - sqrtDiscriminant) / (2 * a)
         let t2 = (-b + sqrtDiscriminant) / (2 * a)
 
-        return  [t1, t2].map { Intersection(distance: $0, object: .sphere(self)) }
+        return  [t1, t2].map { Intersection(distance: $0, object: self) }
     }
 
     public func normal(at point: Tuple) -> Tuple {
