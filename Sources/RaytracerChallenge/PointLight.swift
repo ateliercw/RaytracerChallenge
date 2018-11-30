@@ -1,6 +1,6 @@
 import Foundation
 
-public struct PointLight {
+public struct PointLight: Equatable, Hashable {
     public var intensity: Color
     public var position: Tuple {
         didSet {

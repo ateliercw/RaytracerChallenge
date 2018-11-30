@@ -29,7 +29,7 @@ public struct Sphere: Equatable, Hashable, GeometryObject {
         let t1 = (-b - sqrtDiscriminant) / (2 * a)
         let t2 = (-b + sqrtDiscriminant) / (2 * a)
 
-        return  [t1, t2].map { Intersection(distance: $0, object: self) }
+        return  [t1, t2].map({ Intersection(distance: $0, object: self) }).sorted()
     }
 
     public func normal(at point: Tuple) -> Tuple {

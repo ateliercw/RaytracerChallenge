@@ -1,75 +1,100 @@
+import XCTest
+@testable import RaytracerChallenge
+
+private extension World {
+    static let defaultWorld: World = {
+        let light = PointLight(position: .point(x: -10, y: 10, z: -10), intensity: .white)
+        let s1 = Sphere(material: Material(color: Color(red: 0.8, green: 1, blue: 0.6),
+                                           diffuse: 0.7,
+                                           specular: 0.2))
+        let s2 = Sphere(transform: .scaling(x: 0.5, y: 0.5, z: 0.5))
+        return World(objects: [s1, s2], lights: [light])
+    }()
+}
+
+/// Feature: World
+class TestWorld: XCTestCase {
+    /// Creating a world
+    func testCreatingWorld() {
+        let w = World()
+        XCTAssertTrue(w.objects.isEmpty)
+        XCTAssertTrue(w.lights.isEmpty)
+    }
+
+    /// The default world
+    func testDefaultWorld() {
+        let light = PointLight(position: .point(x: -10, y: 10, z: -10), intensity: .white)
+        let s1 = Sphere(material: Material(color: Color(red: 0.8, green: 1, blue: 0.6),
+                                           diffuse: 0.7,
+                                           specular: 0.2))
+        let s2 = Sphere(transform: .scaling(x: 0.5, y: 0.5, z: 0.5))
+        let w = World.defaultWorld
+        XCTAssertEqual(w.lights.first, light)
+        XCTAssertTrue(w.objects.contains(where: { $0.material == s1.material}))
+        XCTAssertTrue(w.objects.contains(where: { $0.transform == s2.transform}))
+    }
+
+    /// Intersect a world with a ray
+    func testIntersectingWorldWithRay() {
+        let w = World.defaultWorld
+        let ray = Ray(origin: .point(x: 0, y: 0, z: -5), direction: .vector(x: 0, y: 0, z: 1))
+        let xs = w.intersect(with: ray)
+        XCTAssertEqual(xs.count, 4)
+        XCTAssertEqual(xs[0].distance, 4, accuracy: .epsilon)
+        XCTAssertEqual(xs[1].distance, 4.5, accuracy: .epsilon)
+        XCTAssertEqual(xs[2].distance, 5.5, accuracy: .epsilon)
+        XCTAssertEqual(xs[3].distance, 6, accuracy: .epsilon)
+    }
+
+    /// Shading an intersection
+    func testShadingIntersection() {
+        let w = World.defaultWorld
+        let r = Ray(origin: .point(x: 0, y: 0, z: -5),
+                    direction: .vector(x: 0, y: 0, z: 1))
+        guard let shape = w.objects.first else { return XCTFail() }
+        let i = Intersection(distance: 4, object: shape)
+        let comps = IntersectionState(intersection: i, ray: r)
+        XCTAssertEqual(w.shadeHit(with: comps), Color(red: 0.38066, green: 0.47583, blue: 0.2855))
+    }
+
+    /// Shading an intersection from the inside
+    func testShadingIntersectionFromInside() {
+        var w = World.defaultWorld
+        w.lights = [PointLight(position: .point(x: 0, y: 0.25, z:0), intensity: .white)]
+        let r = Ray(origin: .point(x: 0, y: 0, z: 0), direction: .vector(x: 0, y: 0, z: 1))
+        guard w.objects.count >= 2 else { return XCTFail() }
+        let shape = w.objects[1]
+        let i = Intersection(distance: 0.5, object: shape)
+        let comps = IntersectionState(intersection: i, ray: r)
+        XCTAssertEqual(w.shadeHit(with: comps), Color(red: 0.90498, green: 0.90498, blue: 0.90498))
+    }
+
+    /// The color when a ray misses
+    func testColorOnRayMiss() {
+        let w = World.defaultWorld
+        let r = Ray(origin: .point(x: 0, y: 0, z: -5), direction: .vector(x: 0, y: 1, z: 0))
+        XCTAssertEqual(w.color(at: r), Color(red: 0, green: 0, blue: 0))
+    }
+
+    /// The color when a ray hits
+    func testColorOnRayHit() {
+        let w = World.defaultWorld
+        let r = Ray(origin: .point(x: 0, y: 0, z: -5), direction: .vector(x: 0, y: 0, z: 1))
+        XCTAssertEqual(w.color(at: r), Color(red: 0.38066, green: 0.47583, blue: 0.2855))
+    }
+
+    /// The color with an intersection behind the ray
+    func testColorWithIntersectionBehindRay() {
+        var w = World.defaultWorld
+        guard w.objects.count >= 2 else { return XCTFail() }
+        w.objects[0].material.ambient = 1
+        w.objects[1].material.ambient = 1
+        let inner = w.objects[1]
+        let r = Ray(origin: .point(x: 0, y: 0, z: 0.75), direction: .vector(x: 0, y: 0, z: -1))
+        XCTAssertEqual(w.color(at: r), inner.material.color)
+    }
+ }
 /*
-Feature: World
-
-Scenario: Creating a world
-  Given w ← world()
-  Then w contains no objects
-    And w has no light source
-
-Scenario: The default world
-  Given light ← point_light(point(-10, 10, -10), color(1, 1, 1))
-    And s1 ← sphere() with:
-      | material.color     | (0.8, 1.0, 0.6)        |
-      | material.diffuse   | 0.7                    |
-      | material.specular  | 0.2                    |
-    And s2 ← sphere() with:
-      | transform | scaling(0.5, 0.5, 0.5) |
-  When w ← default_world()
-  Then w.light = light
-    And w contains s1
-    And w contains s2
-
-Scenario: Intersect a world with a ray
-  Given w ← default_world()
-    And r ← ray(point(0, 0, -5), vector(0, 0, 1))
-  When xs ← intersect_world(w, r)
-  Then xs.count = 4
-    And xs[0].t = 4
-    And xs[1].t = 4.5
-    And xs[2].t = 5.5
-    And xs[3].t = 6
-
-Scenario: Shading an intersection
-  Given w ← default_world()
-    And r ← ray(point(0, 0, -5), vector(0, 0, 1))
-    And shape ← the first object in w
-    And i ← intersection(4, shape)
-  When comps ← prepare_computations(i, r)
-    And c ← shade_hit(w, comps)
-  Then c = color(0.38066, 0.47583, 0.2855)
-
-Scenario: Shading an intersection from the inside
-  Given w ← default_world()
-    And w.light ← point_light(point(0, 0.25, 0), color(1, 1, 1))
-    And r ← ray(point(0, 0, 0), vector(0, 0, 1))
-    And shape ← the second object in w
-    And i ← intersection(0.5, shape)
-  When comps ← prepare_computations(i, r)
-    And c ← shade_hit(w, comps)
-  Then c = color(0.90498, 0.90498, 0.90498)
-
-Scenario: The color when a ray misses
-  Given w ← default_world()
-    And r ← ray(point(0, 0, -5), vector(0, 1, 0))
-  When c ← color_at(w, r)
-  Then c = color(0, 0, 0)
-
-Scenario: The color when a ray hits
-  Given w ← default_world()
-    And r ← ray(point(0, 0, -5), vector(0, 0, 1))
-  When c ← color_at(w, r)
-  Then c = color(0.38066, 0.47583, 0.2855)
-
-Scenario: The color with an intersection behind the ray
-  Given w ← default_world()
-    And outer ← the first object in w
-    And outer.material.ambient ← 1
-    And inner ← the second object in w
-    And inner.material.ambient ← 1
-    And r ← ray(point(0, 0, 0.75), vector(0, 0, -1))
-  When c ← color_at(w, r)
-  Then c = inner.material.color
-
 Scenario: There is no shadow when nothing is collinear with point and light
   Given w ← default_world()
     And p ← point(0, 10, 0)
