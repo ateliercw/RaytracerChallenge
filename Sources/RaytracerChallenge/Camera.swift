@@ -69,12 +69,12 @@ public struct Camera {
             var innerCanvas = Canvas(width: hRange.count, height: vRange.count)
             guard let hStart = hRange.first, let vStart = vRange.first else { continue }
             let render = BlockOperation {
-                for (x,y) in allCombinations(hRange, vRange) {
+                for (x, y) in allCombinations(hRange, vRange) {
                     innerCanvas[x: x - hStart, y: y - vStart] = world.color(at: self.rayForPixel(x: x, y: y))
                 }
             }
             let draw = BlockOperation {
-                for (x,y) in allCombinations(hRange, vRange) {
+                for (x, y) in allCombinations(hRange, vRange) {
                     canvas[x: x, y: y] = innerCanvas[x: x - hStart, y: y - vStart]
                 }
             }

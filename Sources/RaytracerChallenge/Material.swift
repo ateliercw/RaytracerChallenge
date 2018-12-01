@@ -19,15 +19,19 @@ public struct Material: Equatable, Hashable {
         self.shininess = shininess
     }
 
-    public func lighting(light: PointLight, position: Tuple, eyeVector: Tuple, normalVector: Tuple) -> Color {
+    public func lighting(light: PointLight,
+                         position: Tuple,
+                         eyeVector: Tuple,
+                         normalVector: Tuple,
+                         isInShadow: Bool) -> Color {
         assert(eyeVector.isVector)
         assert(normalVector.isVector)
         let effectiveColor = color * light.intensity
-
-        let lightVector = (light.position - position).normalized
-
         let ambientColor = effectiveColor * ambient
 
+        guard !isInShadow else { return ambientColor }
+
+        let lightVector = (light.position - position).normalized
         // lightDotNormal is the cosine of the angle between light vector
         // and normal vector. A negative number means the
         // light is on the other side of the surface

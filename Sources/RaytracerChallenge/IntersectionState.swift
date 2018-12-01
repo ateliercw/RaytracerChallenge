@@ -11,11 +11,12 @@ struct IntersectionState: Equatable, Hashable {
     init(intersection: Intersection, ray: Ray) {
         self.intersection = intersection
         self.ray = ray
-        self.point = ray.position(intersection.distance)
+        let point = ray.position(intersection.distance)
         self.eyeV = -ray.direction
-        let normalV = intersection.object.normal(at: self.point)
+        let normalV = intersection.object.normal(at: point)
         self.isInside = normalV.dot(self.eyeV) < 0
         self.normalV = self.isInside ? -normalV : normalV
+        self.point = point + (normalV * (.epsilon * 10))
     }
 
     var object: GeometryObject { return intersection.object }

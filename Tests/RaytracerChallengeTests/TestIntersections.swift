@@ -20,7 +20,7 @@ class TestIntersections: XCTestCase {
         let comps = IntersectionState(intersection: i, ray: r)
         XCTAssertEqual(comps.distace, i.distance)
         XCTAssertEqual(comps.object.id, i.object.id)
-        XCTAssertEqual(comps.point, .point(x: 0, y: 0, z: -1))
+        XCTAssertEqual(comps.point, .point(x: 0, y: 0, z: -1.0001))
         XCTAssertEqual(comps.eyeV, .vector(x: 0, y: 0, z: -1))
         XCTAssertEqual(comps.normalV, .vector(x: 0, y: 0, z: -1))
     }
@@ -47,20 +47,22 @@ Scenario: Precomputing the reflection vector
         let shape = Sphere()
         let i = Intersection(distance: 1, object: shape)
         let comps = IntersectionState(intersection: i, ray: r)
-        XCTAssertEqual(comps.point, .point(x: 0, y: 0, z: 1))
+        XCTAssertEqual(comps.point, .point(x: 0, y: 0, z: 1.0001))
         XCTAssertEqual(comps.eyeV, .vector(x: 0, y: 0, z: -1))
         XCTAssertTrue(comps.isInside)
         XCTAssertEqual(comps.normalV, .vector(x: 0, y: 0, z: -1))
     }
-/*
-Scenario: The hit should offset the point
-  Given r ← ray(point(0, 0, -5), vector(0, 0, 1))
-    And shape ← sphere() with:
-      | transform | translation(0, 0, 1) |
-    And i ← intersection(5, shape)
-  When comps ← prepare_computations(i, r)
-  Then comps.point.z < -EPSILON/2
 
+    /// The hit should offset the point
+    func testHitShouldOffsetPoint() {
+        let r = Ray(origin: .point(x: 0, y: 0, z: -5),
+                    direction: .vector(x: 0, y: 0, z: 1))
+        let shape = Sphere(transform: .translation(x: 0, y: 0, z: 1))
+        let i = Intersection(distance: 5, object: shape)
+        let comps = IntersectionState(intersection: i, ray: r)
+        XCTAssertTrue(comps.point.z < -.epsilon / 2)
+    }
+/*
 Scenario: The under point is offset below the surface
   Given r ← ray(point(0, 0, -5), vector(0, 0, 1))
     And shape ← glass_sphere() with:

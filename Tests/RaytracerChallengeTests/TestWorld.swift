@@ -66,7 +66,7 @@ class TestWorld: XCTestCase {
         let shape = w.objects[1]
         let i = Intersection(distance: 0.5, object: shape)
         let comps = IntersectionState(intersection: i, ray: r)
-        XCTAssertEqual(w.shadeHit(with: comps), Color(red: 0.90498, green: 0.90498, blue: 0.90498))
+        XCTAssertEqual(w.shadeHit(with: comps), Color(red: 0.1, green: 0.1, blue: 0.1))
     }
 
     /// The color when a ray misses
@@ -93,28 +93,56 @@ class TestWorld: XCTestCase {
         let r = Ray(origin: .point(x: 0, y: 0, z: 0.75), direction: .vector(x: 0, y: 0, z: -1))
         XCTAssertEqual(w.color(at: r), inner.material.color)
     }
+
+    /// There is no shadow when nothing is collinear with point and light
+    func testShadowWithNothingCollinear() {
+        let w = World.defaultWorld
+        guard let light = w.lights.first else { return XCTFail() }
+        let p = Tuple.point(x: 0, y: 10, z: 0)
+        XCTAssertFalse(w.isShadowed(point: p, light: light))
+    }
+
+    /// The shadow when an object is between the point and the light
+    func testShadowWhenObjectBetween() {
+        let w = World.defaultWorld
+        guard let light = w.lights.first else { return XCTFail() }
+        let p = Tuple.point(x: 10, y: -10, z: 10)
+        XCTAssertTrue(w.isShadowed(point: p, light: light))
+    }
+
+    /// There is no shadow when an object is behind the light
+    func testShadowWhenObjectIsBehindLight() {
+        let w = World.defaultWorld
+        guard let light = w.lights.first else { return XCTFail() }
+        let p = Tuple.point(x: -20, y: -20, z: -20)
+        XCTAssertFalse(w.isShadowed(point: p, light: light))
+    }
+
+    /// There is no shadow when an object is behind the point
+    func testShadowWhenObjectIsBehindPoint() {
+        let w = World.defaultWorld
+        guard let light = w.lights.first else { return XCTFail() }
+        let p = Tuple.point(x: -2, y: 2, z: -2)
+        XCTAssertFalse(w.isShadowed(point: p, light: light))
+    }
+
+    /// shade_hit() is given an intersection in shadow
+    func testShadeHitIsGivenAnIntersectionInShadow() {
+        var w = World()
+        w.lights = [PointLight(position: .point(x: 0, y: 0, z: -10),
+                               intensity: .white)]
+        let s1 = Sphere()
+        let s2 = Sphere(transform: Matrix.translation(x: 0, y: 0, z: 10))
+        w.objects = [s1, s2]
+        let r = Ray(origin: .point(x: 0, y: 0, z: 5),
+                    direction: .vector(x: 0, y: 0, z: 1))
+        let i = Intersection(distance: 4, object: s2)
+        let comps = IntersectionState(intersection: i, ray: r)
+        let c = w.shadeHit(with: comps)
+        XCTAssertEqual(c, Color(red: 0.1, green: 0.1, blue: 0.1))
+    }
  }
 /*
-Scenario: There is no shadow when nothing is collinear with point and light
-  Given w ← default_world()
-    And p ← point(0, 10, 0)
-   Then is_shadowed(w, p) is false
-
-Scenario: The shadow when an object is between the point and the light
-  Given w ← default_world()
-    And p ← point(10, -10, 10)
-   Then is_shadowed(w, p) is true
-
-Scenario: There is no shadow when an object is behind the light
-  Given w ← default_world()
-    And p ← point(-20, 20, -20)
-   Then is_shadowed(w, p) is false
-
-Scenario: There is no shadow when an object is behind the point
-  Given w ← default_world()
-    And p ← point(-2, 2, -2)
-   Then is_shadowed(w, p) is false
-
 Scenario: shade_hit() is given an intersection in shadow
   Given w ← world()
     And w.light ← point_light(point(0, 0, -10), color(1, 1, 1))

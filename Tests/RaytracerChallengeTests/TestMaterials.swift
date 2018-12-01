@@ -31,7 +31,11 @@ Scenario: Transparency and Refractive Index for the default material
         let eyeV = Tuple.vector(x: 0, y: 0, z: -1)
         let normalV = Tuple.vector(x: 0, y: 0, z: -1)
         let light = PointLight(position: .point(x: 0, y: 0, z: -10), intensity: .white)
-        let result = m.lighting(light: light, position: position, eyeVector: eyeV, normalVector: normalV)
+        let result = m.lighting(light: light,
+                                position: position,
+                                eyeVector: eyeV,
+                                normalVector: normalV,
+                                isInShadow: false)
         XCTAssertEqual(result, Color(red: 1.9, green: 1.9, blue: 1.9))
     }
 
@@ -40,7 +44,11 @@ Scenario: Transparency and Refractive Index for the default material
         let eyeV = Tuple.vector(x: 0, y: sqrt(2)/2, z: -sqrt(2)/2)
         let normalV = Tuple.vector(x: 0, y: 0, z: -1)
         let light = PointLight(position: .point(x: 0, y: 0, z: -10), intensity: .white)
-        let result = m.lighting(light: light, position: position, eyeVector: eyeV, normalVector: normalV)
+        let result = m.lighting(light: light,
+                                position: position,
+                                eyeVector: eyeV,
+                                normalVector: normalV,
+                                isInShadow: false)
         XCTAssertEqual(result, Color(red: 1, green: 1, blue: 1))
     }
 
@@ -49,7 +57,11 @@ Scenario: Transparency and Refractive Index for the default material
         let eyeV = Tuple.vector(x: 0, y: 0, z: -1)
         let normalV = Tuple.vector(x: 0, y: 0, z: -1)
         let light = PointLight(position: .point(x: 0, y: 10, z: -10), intensity: .white)
-        let result = m.lighting(light: light, position: position, eyeVector: eyeV, normalVector: normalV)
+        let result = m.lighting(light: light,
+                                position: position,
+                                eyeVector: eyeV,
+                                normalVector: normalV,
+                                isInShadow: false)
         XCTAssertEqual(result, Color(red: 0.7364, green: 0.7364, blue: 0.7364))
     }
 
@@ -58,7 +70,11 @@ Scenario: Transparency and Refractive Index for the default material
         let eyeV = Tuple.vector(x: 0, y: -sqrt(2)/2, z: -sqrt(2)/2)
         let normalV = Tuple.vector(x: 0, y: 0, z: -1)
         let light = PointLight(position: .point(x: 0, y: 10, z: -10), intensity: .white)
-        let result = m.lighting(light: light, position: position, eyeVector: eyeV, normalVector: normalV)
+        let result = m.lighting(light: light,
+                                position: position,
+                                eyeVector: eyeV,
+                                normalVector: normalV,
+                                isInShadow: false)
         XCTAssertEqual(result, Color(red: 1.63638, green: 1.63638, blue: 1.63638))
     }
 
@@ -67,18 +83,29 @@ Scenario: Transparency and Refractive Index for the default material
         let eyeV = Tuple.vector(x: 0, y: 0, z: -1)
         let normalV = Tuple.vector(x: 0, y: 0, z: -1)
         let light = PointLight(position: .point(x: 0, y: 0, z: 10), intensity: .white)
-        let result = m.lighting(light: light, position: position, eyeVector: eyeV, normalVector: normalV)
+        let result = m.lighting(light: light,
+                                position: position,
+                                eyeVector: eyeV,
+                                normalVector: normalV,
+                                isInShadow: false)
         XCTAssertEqual(result, Color(red: 0.1, green: 0.1, blue: 0.1))
     }
-/*
-Scenario: Lighting with the surface in shadow
-  Given eyev ← vector(0, 0, -1)
-    And normalv ← vector(0, 0, -1)
-    And light ← point_light(point(0, 0, -10), color(1, 1, 1))
-    And in_shadow ← true
-  When result ← lighting(m, light, position, eyev, normalv, in_shadow)
-  Then result = color(0.1, 0.1, 0.1)
 
+    /// Lighting with the surface in shadow
+    func testLightingWithSurfaceInShadow() {
+        let eyeV = Tuple.vector(x: 0, y: 0, z: -1)
+        let normalV = Tuple.vector(x: 0, y: 0, z: -1)
+        let light = PointLight(position: .point(x: 0, y: 0, z: -10),
+                               intensity: .white)
+        let result = m.lighting(light: light,
+                                position: position,
+                                eyeVector: eyeV,
+                                normalVector: normalV,
+                                isInShadow: true)
+        XCTAssertEqual(result, Color(red: 0.1, green: 0.1, blue: 0.1))
+    }
+
+/*
 Scenario: Lighting with a pattern applied
   Given m.pattern ← stripe_pattern(color(1, 1, 1), color(0, 0, 0))
     And m.ambient ← 1
