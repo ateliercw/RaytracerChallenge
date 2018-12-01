@@ -1,7 +1,7 @@
 import XCTest
 @testable import RaytracerChallenge
 
-private extension World {
+extension World {
     static let defaultWorld: World = {
         let light = PointLight(position: .point(x: -10, y: 10, z: -10), intensity: .white)
         let s1 = Sphere(material: Material(color: Color(red: 0.8, green: 1, blue: 0.6),

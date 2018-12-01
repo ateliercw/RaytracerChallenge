@@ -171,37 +171,43 @@ class TestMatrixTransformations: XCTestCase {
             .scaled(x: 5, y: 5, z: 5)
             .translated(x: 10, y: 5, z: 7) * p, .point(x: 15, y: 0, z: 7))
     }
+
+    /// The transformation matrix for the default orientation
+    func testViewTranformationForDefaultOrientation() {
+        let from = Tuple.point(x: 0, y: 0, z: 0)
+        let to = Tuple.point(x: 0, y: 0, z: -1)
+        let up = Tuple.vector(x: 0, y: 1, z: 0)
+        let t = Matrix(from: from, to: to, up: up)
+        XCTAssertEqual(t, .identity)
+    }
+
+    /// A view transformation matrix looking in positive z direction
+    func testViewTranformationMatrixLookingInPositiveZDirection() {
+        let from = Tuple.point(x: 0, y: 0, z: 0)
+        let to = Tuple.point(x: 0, y: 0, z: 1)
+        let up = Tuple.vector(x: 0, y: 1, z: 0)
+        let t = Matrix(from: from, to: to, up: up)
+        XCTAssertEqual(t, .scaling(x: -1, y: 1, z: -1))
+    }
+
+    /// A view transformation moves the world
+    func testViewTransfroamtionMovesWorld() {
+        let from = Tuple.point(x: 0, y: 0, z: 8)
+        let to = Tuple.point(x: 0, y: 0, z: 1)
+        let up = Tuple.vector(x: 0, y: 1, z: 0)
+        let t = Matrix(from: from, to: to, up: up)
+        XCTAssertEqual(t, .translation(x: 0, y: 0, z: -8))
+    }
+
+    /// An arbitrary view transformation
+    func testArbitraryViewTransformation() {
+        let from = Tuple.point(x: 1, y: 3, z: 2)
+        let to = Tuple.point(x: 4, y: -2, z: 8)
+        let up = Tuple.vector(x: 1, y: 1, z: 0)
+        let t = Matrix(from: from, to: to, up: up)
+        XCTAssertEqual(t, Matrix([[-0.50709, 0.50709, 0.67612, -2.36643],
+                                  [0.76772, 0.60609, 0.12122, -2.82843],
+                                  [-0.35857, 0.59761, -0.71714, 0.00000],
+                                  [0.00000, 0.00000, 0.00000, 1.00000]]))
+    }
 }
-/*
-Scenario: The transformation matrix for the default orientation
-  Given from ← point(0, 0, 0)
-    And to ← point(0, 0, -1)
-    And up ← vector(0, 1, 0)
-  When t ← view_transform(from, to, up)
-  Then t = identity_matrix
-
-Scenario: A view transformation matrix looking in positive z direction
-  Given from ← point(0, 0, 0)
-    And to ← point(0, 0, 1)
-    And up ← vector(0, 1, 0)
-  When t ← view_transform(from, to, up)
-  Then t = scaling(-1, 1, -1)
-
-Scenario: The view transformation moves the world
-  Given from ← point(0, 0, 8)
-    And to ← point(0, 0, 0)
-    And up ← vector(0, 1, 0)
-  When t ← view_transform(from, to, up)
-  Then t = translation(0, 0, -8)
-
-Scenario: An arbitrary view transformation
-  Given from ← point(1, 3, 2)
-    And to ← point(4, -2, 8)
-    And up ← vector(1, 1, 0)
-  When t ← view_transform(from, to, up)
-  Then t is the following 4x4 matrix:
-      | -0.50709 | 0.50709 |  0.67612 | -2.36643 |
-      |  0.76772 | 0.60609 |  0.12122 | -2.82843 |
-      | -0.35857 | 0.59761 | -0.71714 |  0.00000 |
-      |  0.00000 | 0.00000 |  0.00000 |  1.00000 |
-*/
