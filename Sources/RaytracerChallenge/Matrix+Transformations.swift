@@ -94,4 +94,18 @@ extension Matrix {
         sheared[row: 2, column: 1] = zY
         return sheared
     }
+
+    public init(from: Tuple, to destination: Tuple, up direction: Tuple) {
+        assert(from.isPoint)
+        assert(destination.isPoint)
+        assert(direction.isVector)
+        let forward = (destination - from).normalized
+        let left = forward.cross(direction.normalized)
+        let trueUp = left.cross(forward)
+        let orientation = Matrix([[left.x, left.y, left.z, 0],
+                                  [trueUp.x, trueUp.y, trueUp.z, 0],
+                                  [-forward.x, -forward.y, -forward.z, 0],
+                                  [0, 0, 0, 1]])
+        self = orientation * .translation(x: -from.x, y: -from.y, z: -from.z)
+    }
 }

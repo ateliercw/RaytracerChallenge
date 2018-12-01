@@ -15,7 +15,9 @@ let package = Package(
         .executable(name: "DrawSphere",
                     targets: ["DrawSphere"]),
         .executable(name: "DrawShadedSphere",
-                    targets: ["DrawShadedSphere"])
+                    targets: ["DrawShadedSphere"]),
+        .executable(name: "DrawWorld",
+                    targets: ["DrawWorld"])
     ],
     dependencies: [],
     targets: [
@@ -23,13 +25,15 @@ let package = Package(
                 dependencies: []),
         .target(name: "Ticking",
                 dependencies: ["RaytracerChallenge"]),
+        .target(name: "Clock",
+                dependencies: ["RaytracerChallenge"]),
         .target(name: "Projectile",
                 dependencies: ["RaytracerChallenge"]),
         .target(name: "DrawSphere",
                 dependencies: ["RaytracerChallenge"]),
         .target(name: "DrawShadedSphere",
                 dependencies: ["RaytracerChallenge"]),
-		.target(name: "Clock",
+        .target(name: "DrawWorld",
                 dependencies: ["RaytracerChallenge"]),
         .testTarget(name: "RaytracerChallengeTests",
                     dependencies: ["RaytracerChallenge"])

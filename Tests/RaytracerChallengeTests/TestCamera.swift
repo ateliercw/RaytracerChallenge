@@ -1,50 +1,66 @@
-/*
-Feature: Camera
+import XCTest
+@testable import RaytracerChallenge
 
-Scenario: Constructing a camera
-  Given hsize ← 160
-    And vsize ← 120
-    And field_of_view ← π/2
-  When c ← camera(hsize, vsize, field_of_view)
-  Then c.hsize = 160
-    And c.vsize = 120
-    And c.field_of_view = π/2
-    And c.transform = identity_matrix
+/// Feature: Camera
+class CameraTests: XCTestCase {
+    /// Constructing a camera
+    func testConstructingCamera() {
+        let hSize = 160
+        let vSize = 120
+        let fieldOfView = Float.pi / 2
+        let c = Camera(hSize: hSize, vSize: vSize, fieldOfView: fieldOfView)
+        XCTAssertEqual(c.hSize, hSize)
+        XCTAssertEqual(c.vSize, vSize)
+        XCTAssertEqual(c.fieldOfView, fieldOfView)
+        XCTAssertEqual(c.transform, .identity)
+    }
 
-Scenario: The pixel size for a horizontal canvas
-  Given c ← camera(200, 125, π/2)
-  Then c.pixel_size = 0.01
+    /// The pixel size for a horizontal canvas
+    func testPixelSizeForHorizontalCanvas() {
+        let c = Camera(hSize: 200, vSize: 125, fieldOfView: .pi / 2)
+        XCTAssertEqual(c.pixelSize, 0.01, accuracy: .epsilon)
+    }
 
-Scenario: The pixel size for a vertical canvas
-  Given c ← camera(125, 200, π/2)
-  Then c.pixel_size = 0.01
+    /// The pixel size for a vertical canvas
+    func testPixelSizeForVerticalCanvas() {
+        let c = Camera(hSize: 125, vSize: 200, fieldOfView: .pi / 2)
+        XCTAssertEqual(c.pixelSize, 0.01, accuracy: .epsilon)
+    }
 
-Scenario: Constructing a ray through the center of the canvas
-  Given c ← camera(201, 101, π/2)
-  When r ← ray_for_pixel(c, 100, 50)
-  Then r.origin = point(0, 0, 0)
-    And r.direction = vector(0, 0, -1)
+    /// Constructing a ray through the center of the canvas
+    func testConstructingRayThroughCenterOfCanvas() {
+        let c = Camera(hSize: 201, vSize: 101, fieldOfView: .pi / 2)
+        let r = c.rayForPixel(x: 100, y: 50)
+        XCTAssertEqual(r.origin, .point(x: 0, y: 0, z: 0))
+        XCTAssertEqual(r.direction, .vector(x: 0, y: 0, z: -1))
+    }
 
-Scenario: Constructing a ray through a corner of the canvas
-  Given c ← camera(201, 101, π/2)
-  When r ← ray_for_pixel(c, 0, 0)
-  Then r.origin = point(0, 0, 0)
-    And r.direction = vector(0.66519, 0.33259, -0.66851)
+    /// Constructing a ray through a corner of the canvas
+    func testConstructingRayThroughCornerOfCanvas() {
+        let c = Camera(hSize: 201, vSize: 101, fieldOfView: .pi / 2)
+        let r = c.rayForPixel(x: 0, y: 0)
+        XCTAssertEqual(r.origin, .point(x: 0, y: 0, z: 0))
+        XCTAssertEqual(r.direction, .vector(x: 0.66519, y: 0.33259, z: -0.66852))
+    }
 
-Scenario: Constructing a ray when the camera is transformed
-  Given c ← camera(201, 101, π/2)
-  When c.transform ← rotation_y(π/4) * translation(0, -2, 5)
-    And r ← ray_for_pixel(c, 100, 50)
-  Then r.origin = point(0, 2, -5)
-    And r.direction = vector(√2/2, 0, -√2/2)
+    /// Constructing a ray when the camera is transformed
+    func testConstructingRayWhenCameraIsTransformed() {
+        var c = Camera(hSize: 201, vSize: 101, fieldOfView: .pi / 2)
+        c.transform = Matrix.translation(x: 0, y: -2, z: 5).rotated(y: .pi / 4)
+        let r = c.rayForPixel(x: 100, y: 50)
+        XCTAssertEqual(r.origin, .point(x: 0, y: 2, z: -5))
+        XCTAssertEqual(r.direction, .vector(x: sqrt(2) / 2, y: 0, z: -sqrt(2) / 2))
+    }
 
-Scenario: Rendering a world with a camera
-  Given w ← default_world()
-    And c ← camera(11, 11, π/2)
-    And from ← point(0, 0, -5)
-    And to ← point(0, 0, 0)
-    And up ← vector(0, 1, 0)
-    And c.transform ← view_transform(from, to, up)
-  When image ← render(c, w)
-  Then pixel_at(image, 5, 5) = color(0.38066, 0.47583, 0.2855)
-*/
+    ///  Rendering a world with a camera
+    func testRenderingWorldWithACamera() {
+        let w = World.defaultWorld
+        var c = Camera(hSize: 11, vSize: 11, fieldOfView: .pi / 2)
+        let from = Tuple.point(x: 0, y: 0, z: -5)
+        let to = Tuple.point(x: 0, y: 0, z: 0)
+        let up = Tuple.vector(x: 0, y: 1, z: 0)
+        c.transform = Matrix(from: from, to: to, up: up)
+        let image = c.render(w)
+        XCTAssertEqual(image[x: 5, y: 5], Color(red: 0.38066, green: 0.47583, blue: 0.2855))
+    }
+}
