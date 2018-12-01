@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Camera: Equatable, Hashable {
+public struct Camera {
     public var hSize: Int
     public var vSize: Int
     public var fieldOfView: Float {
@@ -49,11 +49,41 @@ public struct Camera: Equatable, Hashable {
 
     public func render(_ world: World) -> Canvas {
         var canvas = Canvas(width: hSize, height: vSize)
-        for x in 0..<hSize {
-            for y in 0..<vSize {
-                canvas[x: x, y: y] = world.color(at: rayForPixel(x: x, y: y))
-            }
+        for (x, y) in allCombinations(0..<hSize, 0..<vSize) {
+            canvas[x: x, y: y] = world.color(at: rayForPixel(x: x, y: y))
         }
+        return canvas
+    }
+
+    public func render(_ world: World, buckets: Int, bucketSize: Int = 64) -> Canvas {
+        let bucketQueue = OperationQueue()
+        let renderQueue = OperationQueue()
+        renderQueue.maxConcurrentOperationCount = 1
+        bucketQueue.maxConcurrentOperationCount = buckets
+        var canvas = Canvas(width: hSize, height: vSize)
+        let hSteps = Array(stride(from: 0, to: hSize, by: bucketSize))
+        let vSteps = Array(stride(from: 0, to: vSize, by: bucketSize))
+        let hRanges = zip(hSteps, hSteps.dropFirst() + [hSize]).map({ $0.0..<$0.1 })
+        let vRanges = zip(vSteps, vSteps.dropFirst() + [vSize]).map({ $0.0..<$0.1 })
+        for (hRange, vRange) in allCombinations(hRanges, vRanges) {
+            var innerCanvas = Canvas(width: hRange.count, height: vRange.count)
+            guard let hStart = hRange.first, let vStart = vRange.first else { continue }
+            let render = BlockOperation {
+                for (x,y) in allCombinations(hRange, vRange) {
+                    innerCanvas[x: x - hStart, y: y - vStart] = world.color(at: self.rayForPixel(x: x, y: y))
+                }
+            }
+            let draw = BlockOperation {
+                for (x,y) in allCombinations(hRange, vRange) {
+                    canvas[x: x, y: y] = innerCanvas[x: x - hStart, y: y - vStart]
+                }
+            }
+            draw.addDependency(render)
+            renderQueue.addOperation(draw)
+            bucketQueue.addOperation(render)
+        }
+        bucketQueue.waitUntilAllOperationsAreFinished()
+        renderQueue.waitUntilAllOperationsAreFinished()
         return canvas
     }
 }

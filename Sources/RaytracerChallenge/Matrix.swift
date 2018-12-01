@@ -132,13 +132,6 @@ public struct Matrix: Equatable, Hashable {
     }
 }
 
-private func allCombinations<Collection1, Collection2>(_ lhs: Collection1, _ rhs: Collection2)
-    -> [(Collection1.Element, Collection2.Element)] where Collection1: Collection, Collection2: Collection {
-        return lhs.flatMap { leftItem in
-            return rhs.map { (leftItem, $0) }
-        }
-}
-
 private extension Tuple {
     init(floats: [Float]) {
         assert(floats.count == 4, "Tuple needs 4 floats to be initialized")

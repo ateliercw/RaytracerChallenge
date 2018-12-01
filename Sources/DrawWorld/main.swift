@@ -40,7 +40,7 @@ let camera: Camera = {
     return camera
 }()
 
-let canvas = camera.render(world)
+let canvas = camera.render(world, buckets: 8)
 
 let ppm = PPMGenerator(canvas: canvas)
 
